@@ -18,13 +18,15 @@
     </Source>
 
     <Package>
-        <Name>enpass</Name>
+        <Name>1password</Name>
         <Files>
             <Path fileType="*">/</Path>
         </Files>
         <RuntimeDependencies>
-            <Dependency>libxscrnsaver</Dependency>
-            <Dependency>lsof</Dependency>
+            <Dependency>hicolor-icon-theme</Dependency>
+            <Dependency>libgtk-3</Dependency>
+            <Dependency>libnss</Dependency>
+            <Dependency>xdg-utils</Dependency>
         </RuntimeDependencies>
     </Package>
 
