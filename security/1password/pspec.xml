@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PISI SYSTEM "https://getsol.us/standard/pisi-spec.dtd">
+<PISI>
+    <Source>
+        <Name>1password</Name>
+        <Homepage>https://1password.com</Homepage>
+        <Packager>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Packager>
+        <Summary>A multiplatform password manager</Summary>
+        <Description>A multiplatform password manager</Description>
+        <License>Custom</License>
+        <Archive sha1sum="fff4028049e568cfdb3de9f8504eca40a3f0aea9" type="binary">https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.11.22.x64.tar.gz</Archive>
+        <BuildDependencies>
+            <Dependency>binutils</Dependency>
+        </BuildDependencies>
+    </Source>
+
+    <Package>
+        <Name>enpass</Name>
+        <Files>
+            <Path fileType="*">/</Path>
+        </Files>
+        <RuntimeDependencies>
+            <Dependency>libxscrnsaver</Dependency>
+            <Dependency>lsof</Dependency>
+        </RuntimeDependencies>
+    </Package>
+
+    <History>
+        <Update release="1">
+            <Date>12-09-2025</Date>
+            <Version>8.11.22</Version>
+            <Comment>First release</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
+    </History>
+</PISI>
