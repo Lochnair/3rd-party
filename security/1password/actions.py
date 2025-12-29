@@ -18,17 +18,49 @@ def setup():
     shelltools.system("pwd")
     shelltools.system("tar xvf %s" % tarball)
 
+    # Generate polkit policy file from template at build time
+    srcdir = "1password-%s.x64" % get.srcVERSION()
+    template_path = "%s/com.1password.1Password.policy.tpl" % srcdir
+
+    # Ensure files directory exists
+    shelltools.system("mkdir -p files")
+    policy_path = "files/com.1password.1Password.policy"
+
+    # Read template and substitute POLICY_OWNERS with unix-group:users
+    with open(template_path, 'r') as f:
+        template_content = f.read()
+
+    policy_content = template_content.replace('${POLICY_OWNERS}', 'unix-group:users')
+
+    with open(policy_path, 'w') as f:
+        f.write(policy_content)
+
 
 def install():
     srcdir = "1password-%s.x64" % get.srcVERSION()
 
-    # chrome-sandbox needs to be setuid root (Chromium/Electron classic)
-    shelltools.system("chown root:root %s/chrome-sandbox" % srcdir)
-    shelltools.system("chmod 4755 %s/chrome-sandbox" % srcdir)
-
     # Install main payload into /opt/1Password
     # Result: /opt/1Password/{1password,resources,...}
+    # Note: tmpfiles.d will set correct permissions on chrome-sandbox and BrowserSupport
     pisitools.insinto("/opt", srcdir, "1Password")
+
+    # Install polkit policy file (generated at build time from template)
+    pisitools.insinto(
+        "/usr/share/polkit-1/actions",
+        "files/com.1password.1Password.policy"
+    )
+
+    # Install sysusers.d config to create onepassword group
+    pisitools.insinto(
+        "/usr/lib/sysusers.d",
+        "files/1password-sysusers.conf"
+    )
+
+    # Install tmpfiles.d config to set permissions on binaries
+    pisitools.insinto(
+        "/usr/lib/tmpfiles.d",
+        "files/1password-tmpfiles.conf"
+    )
 
     # Symlink CLI entry into /usr/bin
     pisitools.dosym("/opt/1Password/1password", "/usr/bin/1password")
