@@ -28,6 +28,10 @@
             <Dependency>libnss</Dependency>
             <Dependency>xdg-utils</Dependency>
         </RuntimeDependencies>
+        <AdditionalFiles>
+            <AdditionalFile owner="root" permission="0644" target="/usr/lib/sysusers.d/1password-sysusers.conf">1password-sysusers.conf</AdditionalFile>
+            <AdditionalFile owner="root" permission="0644" target="/usr/lib/tmpfiles.d/1password-tmpfiles.conf">1password-tmpfiles.conf</AdditionalFile>
+        </AdditionalFiles>
     </Package>
 
     <History>

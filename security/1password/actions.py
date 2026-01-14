@@ -23,8 +23,7 @@ def setup():
     template_path = "%s/com.1password.1Password.policy.tpl" % srcdir
 
     # Ensure files directory exists
-    shelltools.system("mkdir -p files")
-    policy_path = "files/com.1password.1Password.policy"
+    policy_path = "com.1password.1Password.policy"
 
     # Read template and substitute POLICY_OWNERS with unix-group:users
     with open(template_path, 'r') as f:
@@ -44,23 +43,8 @@ def install():
     # Note: tmpfiles.d will set correct permissions on chrome-sandbox and BrowserSupport
     pisitools.insinto("/opt", srcdir, "1Password")
 
-    # Install polkit policy file (generated at build time from template)
-    pisitools.insinto(
-        "/usr/share/polkit-1/actions",
-        "files/com.1password.1Password.policy"
-    )
-
-    # Install sysusers.d config to create onepassword group
-    pisitools.insinto(
-        "/usr/lib/sysusers.d",
-        "files/1password-sysusers.conf"
-    )
-
-    # Install tmpfiles.d config to set permissions on binaries
-    pisitools.insinto(
-        "/usr/lib/tmpfiles.d",
-        "files/1password-tmpfiles.conf"
-    )
+    # sysusers.d, and tmpfiles.d configs are installed via AdditionalFiles in pspec.xml
+    pisitools.insinto("/usr/share/polkit-1/actions/", "com.1password.1Password.policy")
 
     # Symlink CLI entry into /usr/bin
     pisitools.dosym("/opt/1Password/1password", "/usr/bin/1password")
