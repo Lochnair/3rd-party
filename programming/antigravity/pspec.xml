@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PISI SYSTEM "https://getsol.us/standard/pisi-spec.dtd">
+<PISI>
+    <Source>
+        <Name>antigravity</Name>
+        <Homepage>https://antigravity.google</Homepage>
+        <Packager>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Packager>
+        <License>Proprietary</License>
+        <PartOf>programming</PartOf>
+        <Summary xml:lang="en">Google Antigravity</Summary>
+        <Description xml:lang="en">Google Antigravity</Description>
+        <Archive sha1sum="1c24039bc499bb3e5aaf39c0a6d42d012f381697" type="targz">https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.14.2-6046590149459968/linux-x64/Antigravity.tar.gz</Archive>
+    </Source>
+
+    <Package>
+        <Name>antigravity</Name>
+        <Summary xml:lang="en">Google Antigravity</Summary>
+        <Description xml:lang="en">Google Antigravity</Description>
+        <PartOf>programming</PartOf>
+        <Files>
+            <Path fileType="data">/opt/antigravity</Path>
+            <Path fileType="data">/usr/bin/antigravity</Path>
+            <Path fileType="data">/usr/share/applications/antigravity.desktop</Path>
+            <Path fileType="data">/usr/share/icons/hicolor/*/apps/antigravity.png</Path>
+        </Files>
+    </Package>
+
+    <History>
+        <Update release="1">
+            <Date>01-14-2026</Date>
+            <Version>1.14.2</Version>
+            <Comment>Initial release</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
+    </History>
+</PISI>
