@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<!DOCTYPE PISI SYSTEM "https://getsol.us/standard/pisi-spec.dtd">
+<PISI>
+    <Source>
+        <Name>zen-browser</Name>
+        <Homepage>https://zen-browser.app/</Homepage>
+        <Packager>
+            <Name>Automated Packaging</Name>
+            <Email>noreply@solus-project.com</Email>
+        </Packager>
+        <Summary>Zen Browser - Experience the web in a new way</Summary>
+        <Description>Zen Browser is a modern web browser based on Firefox, designed for speed, privacy, and customisation. It offers a unique browsing experience with a focus on simplicity and performance.</Description>
+        <License>MPL-2.0</License>
+        <Archive sha1sum="c1831f955d5533182ba4cc92810ed3b433bb83b7" type="tarxz">https://github.com/zen-browser/desktop/releases/download/1.19.6b/zen.linux-x86_64.tar.xz</Archive>
+        <BuildDependencies>
+            <Dependency>binutils</Dependency>
+        </BuildDependencies>
+    </Source>
+
+    <Package>
+        <Name>zen-browser</Name>
+        <Summary>Zen Browser - Experience the web in a new way</Summary>
+        <Description>Zen Browser is a modern web browser based on Firefox, designed for speed, privacy, and customisation. It offers a unique browsing experience with a focus on simplicity and performance.</Description>
+        <PartOf>network.web.browser</PartOf>
+        <Icon>zen-browser</Icon>
+        <RuntimeDependencies>
+            <Dependency>dbus-glib</Dependency>
+            <Dependency>libxscrnsaver</Dependency>
+        </RuntimeDependencies>
+        <Files>
+            <Path fileType="data">/opt/zen-browser</Path>
+            <Path fileType="executable">/usr/bin/zen-browser</Path>
+            <Path fileType="data">/usr/share/applications/zen-browser.desktop</Path>
+            <Path fileType="data">/usr/share/icons/hicolor/*/apps/zen-browser.png</Path>
+        </Files>
+        <AdditionalFiles>
+            <AdditionalFile owner="root" permission="0644" target="/usr/share/applications/zen-browser.desktop">zen-browser.desktop</AdditionalFile>
+        </AdditionalFiles>
+    </Package>
+
+    <History>
+        <Update release="1">
+            <Date>04-05-2026</Date>
+            <Version>1.19.6b</Version>
+            <Comment>Initial release of Zen Browser</Comment>
+            <Name>Lochnair</Name>
+            <Email>lochnair@gmail.com</Email>
+        </Update>
+    </History>
+</PISI>

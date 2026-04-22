@@ -1,0 +1,21 @@
+[Desktop Entry]
+Version=1.0
+Name=Zen Browser
+GenericName=Web Browser
+Comment=Zen Browser - Experience the web in a new way
+Exec=/usr/bin/zen-browser %u
+Terminal=false
+Type=Application
+Icon=zen-browser
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;
+StartupNotify=true
+Actions=new-window;new-private-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=/usr/bin/zen-browser --new-window %u
+
+[Desktop Action new-private-window]
+Name=New Private Window
+Exec=/usr/bin/zen-browser --private-window %u
