@@ -12,7 +12,7 @@
         <PartOf>programming</PartOf>
         <Summary xml:lang="en">Google Antigravity</Summary>
         <Description xml:lang="en">Google Antigravity</Description>
-        <Archive sha1sum="1c24039bc499bb3e5aaf39c0a6d42d012f381697" type="targz">https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.14.2-6046590149459968/linux-x64/Antigravity.tar.gz</Archive>
+        <Archive sha1sum="26ec50ce0cdb8d3166fb628f89d2769cc5727fbb" type="targz">https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/1.21.9-4905428782546944/linux-x64/Antigravity.tar.gz</Archive>
     </Source>
 
     <Package>
@@ -29,6 +29,20 @@
     </Package>
 
     <History>
+        <Update release="3">
+            <Date>04-04-2026</Date>
+            <Version>1.21.9</Version>
+            <Comment>Bump version</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
+        <Update release="2">
+            <Date>02-20-2026</Date>
+            <Version>1.18.3</Version>
+            <Comment>Bump version</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
         <Update release="1">
             <Date>01-14-2026</Date>
             <Version>1.14.2</Version>
