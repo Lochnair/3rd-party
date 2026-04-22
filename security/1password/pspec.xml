@@ -11,7 +11,7 @@
         <Summary>A multiplatform password manager</Summary>
         <Description>A multiplatform password manager</Description>
         <License>Custom</License>
-        <Archive sha1sum="fff4028049e568cfdb3de9f8504eca40a3f0aea9" type="binary">https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.11.22.x64.tar.gz</Archive>
+        <Archive sha1sum="60508ccd9338f493961dd32fb134d18afd4c48ad" type="binary">https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.8.x64.tar.gz</Archive>
         <BuildDependencies>
             <Dependency>binutils</Dependency>
         </BuildDependencies>
@@ -35,6 +35,20 @@
     </Package>
 
     <History>
+        <Update release="3">
+            <Date>04-04-2026</Date>
+            <Version>8.12.8</Version>
+            <Comment>Update to 8.12.8</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
+        <Update release="2">
+            <Date>02-12-2026</Date>
+            <Version>8.12.2</Version>
+            <Comment>Update to 8.12.2e</Comment>
+            <Name>Nils Andreas Svee</Name>
+            <Email>me@lochnair.net</Email>
+        </Update>
         <Update release="1">
             <Date>12-09-2025</Date>
             <Version>8.11.22</Version>
