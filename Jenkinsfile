@@ -98,7 +98,8 @@ timestamps {
                                                         set -euo pipefail
 
                                                         rm -f ./*.eopkg || true
-
+                                                        sudo eopkg update-repo
+ 
                                                         sudo eopkg.py3 bi --ignore-safety pspec.xml
                                                     '''
                                                 }
