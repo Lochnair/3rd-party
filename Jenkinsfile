@@ -35,7 +35,7 @@ timestamps {
                         "--build-arg JENKINS_UID=${uid} " +
                         "--build-arg JENKINS_GID=${gid} " +
                         "--build-arg JENKINS_USER=${userName} " +
-                        "-f ci/solus-builder/Dockerfile ."
+                        "-f Dockerfile ."
                     )
                 }
             }
