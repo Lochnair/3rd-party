@@ -98,8 +98,35 @@ timestamps {
                                                         set -euo pipefail
 
                                                         rm -f ./*.eopkg || true
+
                                                         sudo eopkg update-repo
- 
+
+                                                        python3 - <<'PY' > /tmp/build-deps.txt
+                                            import xml.etree.ElementTree as ET
+
+                                            root = ET.parse("pspec.xml").getroot()
+                                            deps = []
+
+                                            for dep in root.findall(".//BuildDependencies/Dependency"):
+                                                name = (dep.text or "").strip()
+                                                if name:
+                                                    deps.append(name)
+
+                                            seen = set()
+                                            for dep in deps:
+                                                if dep not in seen:
+                                                    seen.add(dep)
+                                                    print(dep)
+                                            PY
+
+                                                        if [ -s /tmp/build-deps.txt ]; then
+                                                            echo "Installing build deps for $(pwd):"
+                                                            cat /tmp/build-deps.txt
+                                                            sudo xargs -r eopkg -y it < /tmp/build-deps.txt
+                                                        else
+                                                            echo "No explicit build deps found in pspec.xml"
+                                                        fi
+
                                                         sudo eopkg.py3 bi --ignore-safety pspec.xml
                                                     '''
                                                 }
