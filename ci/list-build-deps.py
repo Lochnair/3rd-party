@@ -12,8 +12,8 @@ def main() -> int:
     pspec_path = sys.argv[1]
     root = ET.parse(pspec_path).getroot()
 
-    deps: list[str] = []
-    seen: set[str] = set()
+    deps = []
+    seen = set()
 
     for dep in root.findall(".//BuildDependencies/Dependency"):
         name = (dep.text or "").strip()
