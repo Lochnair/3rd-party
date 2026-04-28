@@ -16,6 +16,10 @@ timestamps {
             def depsBuilderImageTag = "solus-3rdparty-builder-deps:${env.BUILD_TAG}"
             def packageDirs = []
 
+            def skippedPackages = [
+                'programming/unity-editor'
+            ] as Set
+
             stage('Checkout') {
                 checkout scm
             }
@@ -66,6 +70,16 @@ timestamps {
                         packageDirs.each { pkg ->
                             echo " - ${pkg}"
                         }
+
+                        def discoveredSkipped = packageDirs.findAll { it in skippedPackages }
+                        def buildablePackages = packageDirs.findAll { !(it in skippedPackages) }
+
+                        echo "Skipping ${discoveredSkipped.size()} package(s):"
+                        discoveredSkipped.each { pkg ->
+                            echo " - ${pkg}"
+                        }
+
+                        packageDirs = buildablePackages
                     }
                 }
             }
