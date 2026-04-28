@@ -1,8 +1,5 @@
 #!groovy
 
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurperClassic
-
 @NonCPS
 String sanitizeName(String s) {
     return s.replaceAll(/[^A-Za-z0-9_.-]+/, '_')
@@ -15,7 +12,7 @@ timestamps {
                 disableConcurrentBuilds()
             ])
 
-            def builderImage = null
+            def builderImageTag = "solus-3rdparty-builder:${env.BUILD_TAG}"
             def packageDirs = []
 
             stage('Checkout') {
@@ -30,19 +27,19 @@ timestamps {
 
                     echo "Host Jenkins user: ${userName} (${uid}:${gid})"
 
-                    builderImage = docker.build(
-                        "solus-3rdparty-builder:${env.BUILD_TAG}",
+                    docker.build(
+                        builderImageTag,
                         "--build-arg JENKINS_UID=${uid} " +
                         "--build-arg JENKINS_GID=${gid} " +
                         "--build-arg JENKINS_USER=${userName} " +
-                        "-f Dockerfile ."
+                        "-f ci/solus-builder/Dockerfile ."
                     )
                 }
             }
 
             stage('Discover packages') {
                 script {
-                    builderImage.inside {
+                    docker.image(builderImageTag).inside {
                         def raw = sh(
                             script: '''
                                 set -euo pipefail
@@ -91,7 +88,7 @@ timestamps {
                                     unstash 'source-tree'
 
                                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                                        builderImage.inside {
+                                        docker.image(builderImageTag).inside {
                                             stage("Build: ${pkg}") {
                                                 dir(pkg) {
                                                     sh '''
@@ -101,23 +98,7 @@ timestamps {
 
                                                         sudo eopkg update-repo
 
-                                                        python3 - <<'PY' > /tmp/build-deps.txt
-                                            import xml.etree.ElementTree as ET
-
-                                            root = ET.parse("pspec.xml").getroot()
-                                            deps = []
-
-                                            for dep in root.findall(".//BuildDependencies/Dependency"):
-                                                name = (dep.text or "").strip()
-                                                if name:
-                                                    deps.append(name)
-
-                                            seen = set()
-                                            for dep in deps:
-                                                if dep not in seen:
-                                                    seen.add(dep)
-                                                    print(dep)
-                                            PY
+                                                        python3 "$WORKSPACE/ci/list-build-deps.py" pspec.xml > /tmp/build-deps.txt
 
                                                         if [ -s /tmp/build-deps.txt ]; then
                                                             echo "Installing build deps for $(pwd):"
