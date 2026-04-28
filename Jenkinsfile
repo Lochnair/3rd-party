@@ -12,14 +12,15 @@ timestamps {
                 disableConcurrentBuilds()
             ])
 
-            def builderImageTag = "solus-3rdparty-builder:${env.BUILD_TAG}"
+            def baseBuilderImageTag = "solus-3rdparty-builder-base:${env.BUILD_TAG}"
+            def depsBuilderImageTag = "solus-3rdparty-builder-deps:${env.BUILD_TAG}"
             def packageDirs = []
 
             stage('Checkout') {
                 checkout scm
             }
 
-            stage('Build builder image') {
+            stage('Build base builder image') {
                 script {
                     def uid = sh(script: 'id -u', returnStdout: true).trim()
                     def gid = sh(script: 'id -g', returnStdout: true).trim()
@@ -28,7 +29,7 @@ timestamps {
                     echo "Host Jenkins user: ${userName} (${uid}:${gid})"
 
                     docker.build(
-                        builderImageTag,
+                        baseBuilderImageTag,
                         "--build-arg JENKINS_UID=${uid} " +
                         "--build-arg JENKINS_GID=${gid} " +
                         "--build-arg JENKINS_USER=${userName} " +
@@ -39,7 +40,7 @@ timestamps {
 
             stage('Discover packages') {
                 script {
-                    docker.image(builderImageTag).inside {
+                    docker.image(baseBuilderImageTag).inside {
                         def raw = sh(
                             script: '''
                                 set -euo pipefail
@@ -69,6 +70,59 @@ timestamps {
                 }
             }
 
+            stage('Collect build deps') {
+                script {
+                    docker.image(baseBuilderImageTag).inside {
+                        sh '''
+                            set -euo pipefail
+
+                            mkdir -p ci
+                            : > ci/all-build-deps.txt
+
+                            find . \
+                              -path '*/.git/*' -prune -o \
+                              -path '*/eopkg/*' -prune -o \
+                              -name pspec.xml -print \
+                            | while IFS= read -r pspec; do
+                                python3 ci/list-build-deps.py "$pspec"
+                              done \
+                            | sort -u > ci/all-build-deps.txt
+
+                            echo "Collected build deps:"
+                            if [ -s ci/all-build-deps.txt ]; then
+                                cat ci/all-build-deps.txt
+                            else
+                                echo "(none)"
+                            fi
+                        '''
+                    }
+                }
+            }
+
+            stage('Build deps builder image') {
+                script {
+                    writeFile file: 'ci/solus-builder/Dockerfile.deps', text: """
+FROM ${baseBuilderImageTag}
+
+COPY ci/all-build-deps.txt /tmp/all-build-deps.txt
+
+RUN sudo eopkg update-repo && \\
+    if [ -s /tmp/all-build-deps.txt ]; then \\
+        echo "Installing pre-collected build deps:" && \\
+        cat /tmp/all-build-deps.txt && \\
+        sudo xargs -r eopkg -y it < /tmp/all-build-deps.txt; \\
+    else \\
+        echo "No build deps to install."; \\
+    fi
+"""
+
+                    docker.build(
+                        depsBuilderImageTag,
+                        "-f ci/solus-builder/Dockerfile.deps ."
+                    )
+                }
+            }
+
             stage('Stash source') {
                 stash name: 'source-tree', includes: '**/*', useDefaultExcludes: false
             }
@@ -88,25 +142,13 @@ timestamps {
                                     unstash 'source-tree'
 
                                     catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                                        docker.image(builderImageTag).inside {
+                                        docker.image(depsBuilderImageTag).inside {
                                             stage("Build: ${pkg}") {
                                                 dir(pkg) {
                                                     sh '''
                                                         set -euo pipefail
 
                                                         rm -f ./*.eopkg || true
-
-                                                        sudo eopkg update-repo
-
-                                                        python3 "$WORKSPACE/ci/list-build-deps.py" pspec.xml > /tmp/build-deps.txt
-
-                                                        if [ -s /tmp/build-deps.txt ]; then
-                                                            echo "Installing build deps for $(pwd):"
-                                                            cat /tmp/build-deps.txt
-                                                            sudo xargs -r eopkg -y it < /tmp/build-deps.txt
-                                                        else
-                                                            echo "No explicit build deps found in pspec.xml"
-                                                        fi
 
                                                         sudo eopkg.py3 bi --ignore-safety pspec.xml
                                                     '''
