@@ -164,7 +164,7 @@ RUN sudo eopkg update-repo && \\
 
                                                         rm -f ./*.eopkg || true
 
-                                                        sudo eopkg.py3 bi --ignore-safety pspec.xml
+                                                        sudo eopkg.py bi --ignore-safety pspec.xml
                                                     '''
                                                 }
                                             }
