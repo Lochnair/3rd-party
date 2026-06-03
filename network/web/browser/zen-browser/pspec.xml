@@ -11,7 +11,7 @@
         <Summary>Zen Browser - Experience the web in a new way</Summary>
         <Description>Zen Browser is a modern web browser based on Firefox, designed for speed, privacy, and customisation. It offers a unique browsing experience with a focus on simplicity and performance.</Description>
         <License>MPL-2.0</License>
-        <Archive sha1sum="c1831f955d5533182ba4cc92810ed3b433bb83b7" type="tarxz">https://github.com/zen-browser/desktop/releases/download/1.19.6b/zen.linux-x86_64.tar.xz</Archive>
+        <Archive sha1sum="9d5251d2b6ef47619c6570cc82bb8428cee317e1" type="tarxz">https://github.com/zen-browser/desktop/releases/download/1.20.1b/zen.linux-x86_64.tar.xz</Archive>
         <BuildDependencies>
             <Dependency>binutils</Dependency>
         </BuildDependencies>
@@ -39,6 +39,13 @@
     </Package>
 
     <History>
+        <Update release="2">
+            <Date>03-06-2026</Date>
+            <Version>1.20.1b</Version>
+            <Comment>Update</Comment>
+            <Name>Lochnair</Name>
+            <Email>lochnair@gmail.com</Email>
+        </Update>
         <Update release="1">
             <Date>04-05-2026</Date>
             <Version>1.19.6b</Version>
